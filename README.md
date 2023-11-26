@@ -1,2 +1,1 @@
-# olaf-lib-js
-OLAF Library for JS
+# OLAF Lib (JS)
