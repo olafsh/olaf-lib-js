@@ -1,1 +1,1 @@
-# OLAF Library for JS
+# OLAF SDK for JS
