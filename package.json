@@ -1,5 +1,5 @@
 {
-  "name": "@olafsh/olaf-sdk",
+  "name": "@olafsh/olaf-sdk-js",
   "version": "0.0.1",
   "description": "OLAF SDK for JS",
   "main": "index.js",
@@ -11,7 +11,7 @@
     "url": "git+https://github.com/olafsh/olaf-sdk-js.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/olafsh/olaf-sdk-js/issues"
   },

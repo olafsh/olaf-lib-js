@@ -1,0 +1,43 @@
+# Dependency directories
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Build output
+dist/
+build/
+
+# Ignore any local development environment configuration files
+.env
+
+# macOS
+.DS_Store
+
+# Editor specific files
+.vscode/
+.idea/
+
+# Compiled output
+*.compiled.js
+*.map
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
