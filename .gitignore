@@ -41,3 +41,8 @@ Thumbs.db
 
 # Windows shortcuts
 *.lnk
+
+# Typescript
+src/**/*.js
+src/**/*.js.map
+src/**/*.d.ts
