@@ -43,6 +43,4 @@ Thumbs.db
 *.lnk
 
 # Typescript
-src/**/*.js
-src/**/*.js.map
-src/**/*.d.ts
+*.d.ts

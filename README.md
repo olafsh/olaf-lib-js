@@ -12,6 +12,6 @@ The source code is compiled via `npm run build` command to `/lib` directory.
     # Compile changes
     npm run build
     
-    # Run tests
+    # Run test
     npm run test
 ```

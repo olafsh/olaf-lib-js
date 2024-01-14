@@ -7,6 +7,8 @@ export function meaningOfLife(): number {
     return answer;
 }
 
+module.exports.meaningOfLife = meaningOfLife;
+
 export default {
     meaningOfLife
 };
