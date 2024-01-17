@@ -1,6 +1,6 @@
 {
   "name": "@olafsh/olaf-sdk-js",
-  "version": "0.0.1",
+  "version": "0.0.0-development",
   "description": "OLAF SDK for JavaScript",
   "files": [
     "dist/",
@@ -29,14 +29,20 @@
     "format:check": "prettier --check \"lib/**/*.ts\" \"test/**/*.ts\"",
     "format:fix": "prettier --write \"lib/**/*.ts\" \"test/**/*.ts\"",
     "prepack": "npm run compile",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "semantic-release": "semantic-release"
   },
   "publishConfig": {
     "access": "public"
   },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/olafsh/olaf-sdk-js.git"
+    "url": "https://github.com/olafsh/olaf-sdk-js.git"
   },
   "author": "",
   "license": "MIT",
@@ -52,6 +58,7 @@
     "mocha": "^10.0.0",
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",
+    "semantic-release": "^23.0.0",
     "ts-node": "^10.2.1",
     "tsd": "^0.27.0",
     "typescript": "^4.4.2"
