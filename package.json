@@ -28,7 +28,8 @@
     "test:unit": "mocha --require ts-node/register --reporter spec --slow 200 --bail --timeout 10000 test/index.spec.ts",
     "format:check": "prettier --check \"lib/**/*.ts\" \"test/**/*.ts\"",
     "format:fix": "prettier --write \"lib/**/*.ts\" \"test/**/*.ts\"",
-    "prepack": "npm run compile"
+    "prepack": "npm run compile",
+    "prepare": "husky install"
   },
   "publishConfig": {
     "access": "public"
@@ -44,15 +45,16 @@
   },
   "homepage": "https://github.com/olafsh/olaf-sdk-js#readme",
   "devDependencies": {
+    "@types/chai": "^4.3.3",
     "@types/mocha": "^9.0.0",
+    "chai": "^4.3.6",
+    "husky": "^8.0.0",
     "mocha": "^10.0.0",
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",
     "ts-node": "^10.2.1",
     "tsd": "^0.27.0",
-    "typescript": "^4.4.2",
-    "@types/chai": "^4.3.3",
-    "chai": "^4.3.6"
+    "typescript": "^4.4.2"
   },
   "tsd": {
     "directory": "test"
