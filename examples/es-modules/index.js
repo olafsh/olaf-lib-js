@@ -1,3 +1,3 @@
-import {meaningOfLife} from "@olafsh/olaf-sdk-js";
+import OLAFSDK from "@olafsh/olaf-sdk-js";
 
-console.log(meaningOfLife());
+const sdk = new OLAFSDK();

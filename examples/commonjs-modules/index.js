@@ -1,3 +1,3 @@
-const sdk = require('@olafsh/olaf-sdk-js');
+const OLAFSDK = require('@olafsh/olaf-sdk-js');
 
-console.log(sdk.meaningOfLife());
+const sdk = new OLAFSDK();
