@@ -2,9 +2,13 @@
 
 ## Overview
 
-OLAF SDK for JS facilitates seamless integration of OLAF into your apps,
-offering features such as secure credential storage, effortless login and
-logout processes, and convenient access to user information.
+OLAF SDK for JS facilitates seamless integration of [OLAF.sh](https://olaf.sh/) into your apps,
+offering features such as:
+
+- 🗃️ secure credential storage,
+- 🔐 effortless login and
+  logout processes,
+- 👤 and convenient access to user information, styles and permissions.
 
 ## Installation
 
