@@ -22,13 +22,17 @@ yarn add @olafsh/olaf-sdk-js
 
 ## Initialize SDK
 
+SDK can be imported either via CommonJS or ES Modules methods.
+
+### CommonJS syntax
+
 ```js
 const OLAFSDK = require('@olafsh/olaf-sdk-js');
 
 const sdk = new OLAFSDK();
 ```
 
-### Module syntax
+### ES Modules syntax
 
 ```js
 import OLAFSDK from "@olafsh/olaf-sdk-js";
