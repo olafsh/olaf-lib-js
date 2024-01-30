@@ -1,0 +1,69 @@
+{
+  "name": "@olafsh/olaf-sdk-js",
+  "version": "1.0.0",
+  "description": "OLAF SDK for JavaScript",
+  "files": [
+    "dist/",
+    "wrapper.mjs",
+    "!**/*.tsbuildinfo"
+  ],
+  "directories": {
+    "doc": "docs/",
+    "example": "example/",
+    "lib": "lib/",
+    "test": "test/"
+  },
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./wrapper.mjs",
+    "require": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "compile": "rimraf ./dist && tsc",
+    "test": "npm run format:check && npm run compile && npm run test:types && npm run test:unit",
+    "test:types": "tsd",
+    "test:unit": "mocha --require ts-node/register --reporter spec --slow 200 --bail --timeout 10000 test/index.spec.ts",
+    "format:check": "prettier --check \"lib/**/*.ts\" \"test/**/*.ts\"",
+    "format:fix": "prettier --write \"lib/**/*.ts\" \"test/**/*.ts\"",
+    "prepack": "npm run compile",
+    "prepare": "husky install",
+    "semantic-release": "semantic-release"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/olafsh/olaf-sdk-js.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/olafsh/olaf-sdk-js/issues"
+  },
+  "homepage": "https://github.com/olafsh/olaf-sdk-js#readme",
+  "devDependencies": {
+    "@types/chai": "^4.3.3",
+    "@types/mocha": "^9.0.0",
+    "chai": "^4.3.6",
+    "husky": "^8.0.0",
+    "mocha": "^10.0.0",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
+    "semantic-release": "^23.0.0",
+    "ts-node": "^10.2.1",
+    "tsd": "^0.27.0",
+    "typescript": "^4.4.2"
+  },
+  "tsd": {
+    "directory": "test"
+  }
+}
