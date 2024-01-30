@@ -1,6 +1,6 @@
 {
   "name": "@olafsh/olaf-sdk-js",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "description": "OLAF SDK for JavaScript",
   "files": [
     "dist/",
