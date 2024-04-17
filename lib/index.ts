@@ -23,6 +23,7 @@ class OLAFSDK {
   private CONFIG_TTL = 3600;
 
   private _DEFAULT_OLAF_PUBLIC_ENDPOINT = 'https://public.accounts.olaf.sh';
+  private _DEFAULT_LANGUAGE = 'en';
 
   constructor(olafPublicEndpoint?: string) {
     this.OLAF_PUBLIC_ENDPOINT =
@@ -48,6 +49,16 @@ class OLAFSDK {
     }
 
     return this.verifyToken();
+  }
+
+  private _language?: string;
+
+  get language(): string {
+    if (this._language !== undefined) {
+      return this._language;
+    }
+
+    return this._DEFAULT_LANGUAGE;
   }
 
   public fetchConfig(): Promise<any> {
@@ -82,6 +93,7 @@ class OLAFSDK {
       redirect_uri: redirectUrl,
       code_challenge: codeChallenge,
       code_challenge_method: 'S256',
+      lang: this.language,
     };
     // generate authorize url
     const authorizeUrl = `${this.config.api_endpoint}${
@@ -214,6 +226,10 @@ class OLAFSDK {
       `${config?.api_endpoint}${this.ACCESS_TOKEN_PATH}`,
       JSON.stringify(body)
     );
+  }
+
+  public setLanguage(language: string): void {
+    this._language = language;
   }
 
   private setIsAuthenticated(isAuthenticated: boolean): void {
