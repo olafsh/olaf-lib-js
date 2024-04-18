@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const OLAFSDK = require('@olafsh/olaf-sdk-js');
-  const sdk = new OLAFSDK('https://public.accounts.local.olaf.sh');
+  const sdk = new OLAFSDK();
   sdk.setLanguage('en');
 
   const loginForm = document.getElementById('loginForm');
