@@ -52,8 +52,14 @@ Check [examples/](https://github.com/olafsh/olaf-sdk-js/tree/main/examples) dire
 // Fetch configuration for your app from olaf.sh platform
 await sdk.fetchConfig()
 
-// Perform a login
+// Set language for sign in on olaf.sh platform
+sdk.setLanguage('en');
+
+// Perform a login with redirect
 await sdk.loginWithRedirect();
+
+// OPTIONAL: Build authorize url for manual redirect
+const authorizeUrl = await sdk.buildAuthorizeUrl();
 
 // Handle login callback from olaf.sh platform
 // HINT: It's usually the best to done this on a different route

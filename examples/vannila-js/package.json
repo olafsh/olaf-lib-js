@@ -1,6 +1,6 @@
 {
-  "name": "OLAFSDK HTML example",
-  "version": "1.0.0",
+  "name": "OLAF SDK Vanilla JS Example",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "type": "module",
