@@ -1,4 +1,4 @@
-import type { ConfigModel } from './models/config';
+import type { ConfigModel } from "./models/config";
 import {
   bufferToBase64UrlEncoded,
   createQueryParams,
@@ -6,28 +6,27 @@ import {
   getHost,
   parseQueryResult,
   setStyles,
-} from './utils/utils';
-import { createRandomString, sha256 } from './utils/crypto';
-import { AuthModel } from './models/auth';
+} from "./utils/utils";
+import { createRandomString, sha256 } from "./utils/crypto";
+import { AuthModel } from "./models/auth";
 
 class OLAFSDK {
   private OLAF_PUBLIC_ENDPOINT: string;
-  private CONFIG_PATH = '/config/app/';
-  private ACCESS_TOKEN_PATH = '/o/token/';
-  private VERIFY_TOKEN_PATH = '/o/verify-token/';
-  private AUTHORIZE_PATH = '/o/authorize/';
-  private LOGOUT_PATH = '/o/logout/';
-  private AUTHORIZE_STORAGE_KEY = 'olaf.auth.o';
-  private ACCESS_TOKEN_STORAGE_KEY = 'olaf.auth.token';
-  private CONFIG_STORAGE_KEY = 'olaf.config';
+  private CONFIG_PATH = "/config/app/";
+  private ACCESS_TOKEN_PATH = "/o/token/";
+  private VERIFY_TOKEN_PATH = "/o/verify-token/";
+  private AUTHORIZE_PATH = "/o/authorize/";
+  private LOGOUT_PATH = "/o/logout/";
+  private AUTHORIZE_STORAGE_KEY = "olaf.auth.o";
+  private ACCESS_TOKEN_STORAGE_KEY = "olaf.auth.token";
+  private CONFIG_STORAGE_KEY = "olaf.config";
   private CONFIG_TTL = 3600;
 
-  private _DEFAULT_OLAF_PUBLIC_ENDPOINT = 'https://public.accounts.olaf.sh';
-  private _DEFAULT_LANGUAGE = 'en';
+  private _DEFAULT_OLAF_PUBLIC_ENDPOINT = "https://public.accounts.olaf.sh";
+  private _DEFAULT_LANGUAGE = "en";
 
   constructor(olafPublicEndpoint?: string) {
-    this.OLAF_PUBLIC_ENDPOINT =
-      olafPublicEndpoint ?? this._DEFAULT_OLAF_PUBLIC_ENDPOINT;
+    this.OLAF_PUBLIC_ENDPOINT = olafPublicEndpoint ?? this._DEFAULT_OLAF_PUBLIC_ENDPOINT;
 
     const config = this.getConfigFromLocalStorage();
     if (config !== undefined) {
@@ -62,13 +61,8 @@ class OLAFSDK {
   }
 
   public fetchConfig(): Promise<any> {
-    const headers = { 'X-APP-HOST': getHost() ?? '' };
-    return fetchData(
-      'GET',
-      `${this.OLAF_PUBLIC_ENDPOINT}${this.CONFIG_PATH}`,
-      null,
-      headers
-    )
+    const headers = { "X-APP-HOST": getHost() ?? "" };
+    return fetchData("GET", `${this.OLAF_PUBLIC_ENDPOINT}${this.CONFIG_PATH}`, null, headers)
       .then((config: any) => {
         this.setConfigWithExpiry(config as ConfigModel);
         return Promise.resolve(config);
@@ -80,7 +74,7 @@ class OLAFSDK {
 
   public async buildAuthorizeUrl(): Promise<string> {
     if (this.config === undefined) {
-      return Promise.reject('No config found.');
+      return Promise.reject("No config found.");
     }
     const codeVerifier = createRandomString();
     const codeChallengeBuffer = await sha256(codeVerifier);
@@ -89,25 +83,20 @@ class OLAFSDK {
     // authorize params
     const params = {
       client_id: this.config.client_id,
-      response_type: 'code',
+      response_type: "code",
       redirect_uri: redirectUrl,
       code_challenge: codeChallenge,
-      code_challenge_method: 'S256',
+      code_challenge_method: "S256",
       lang: this.language,
     };
     // generate authorize url
-    const authorizeUrl = `${this.config.api_endpoint}${
-      this.AUTHORIZE_PATH
-    }?${createQueryParams(params)}`;
+    const authorizeUrl = `${this.config.api_endpoint}${this.AUTHORIZE_PATH}?${createQueryParams(params)}`;
     // save data to session storage
     const authorizeStorageParams = {
       code_verifier: codeVerifier,
       redirect_uri: params.redirect_uri,
     };
-    sessionStorage.setItem(
-      this.AUTHORIZE_STORAGE_KEY,
-      JSON.stringify(authorizeStorageParams)
-    );
+    sessionStorage.setItem(this.AUTHORIZE_STORAGE_KEY, JSON.stringify(authorizeStorageParams));
     // return generated authorize url
     return Promise.resolve(authorizeUrl);
   }
@@ -121,17 +110,11 @@ class OLAFSDK {
     const config = this.config;
     const auth = this.getAuthFromLocalStorage();
     if (!auth || !auth.access_token) {
-      return Promise.reject('No access token');
+      return Promise.reject("No access token");
     }
 
     const headers = { Authorization: `Bearer ${auth.access_token}` };
-    return fetchData(
-      'POST',
-      `${config?.api_endpoint}${this.LOGOUT_PATH}`,
-      null,
-      headers,
-      true
-    ).then(() => {
+    return fetchData("POST", `${config?.api_endpoint}${this.LOGOUT_PATH}`, null, headers, true).then(() => {
       localStorage.removeItem(this.ACCESS_TOKEN_STORAGE_KEY);
       window.location.href = window.location.origin;
       this.setIsAuthenticated(false);
@@ -145,12 +128,7 @@ class OLAFSDK {
       return Promise.resolve(false);
     }
     const headers = { Authorization: `Bearer ${auth.access_token}` };
-    return await fetchData(
-      'POST',
-      `${this.config?.api_endpoint}${this.VERIFY_TOKEN_PATH}`,
-      null,
-      headers
-    )
+    return await fetchData("POST", `${this.config?.api_endpoint}${this.VERIFY_TOKEN_PATH}`, null, headers)
       .then(() => {
         this.setIsAuthenticated(true);
         return Promise.resolve(true);
@@ -163,27 +141,25 @@ class OLAFSDK {
 
   public handleRedirectCallback(): Promise<any> {
     // get params
-    const queryStringFragments = window.location.href.split('?').slice(1);
+    const queryStringFragments = window.location.href.split("?").slice(1);
     if (queryStringFragments.length === 0) {
       // remove authorize data from session storage
       sessionStorage.removeItem(this.AUTHORIZE_STORAGE_KEY);
-      return Promise.reject('There are no query params available for parsing.');
+      return Promise.reject("There are no query params available for parsing.");
     }
-    const { code } = parseQueryResult(queryStringFragments.join(''));
+    const { code } = parseQueryResult(queryStringFragments.join(""));
     // get authorize data
-    let authorizeData = JSON.parse(
-      sessionStorage.getItem(this.AUTHORIZE_STORAGE_KEY) ?? ''
-    );
+    let authorizeData = JSON.parse(sessionStorage.getItem(this.AUTHORIZE_STORAGE_KEY) ?? "");
     // remove authorize data from session storage
     sessionStorage.removeItem(this.AUTHORIZE_STORAGE_KEY);
     // authorize data should have a `code_verifier` to do PKCE
     if (!authorizeData || !authorizeData.code_verifier) {
-      return Promise.reject('Invalid state');
+      return Promise.reject("Invalid state");
     }
     // get access token
     return this.getAccessToken(authorizeData.code_verifier, code)
       .then((data: any) => {
-        if (data != null && 'error' in data) {
+        if (data != null && "error" in data) {
           return Promise.reject(data);
         }
         // save access token
@@ -194,7 +170,7 @@ class OLAFSDK {
       })
       .catch(() => {
         this.setIsAuthenticated(false);
-        return Promise.reject('Error while fetching access token');
+        return Promise.reject("Error while fetching access token");
       });
   }
 
@@ -202,16 +178,12 @@ class OLAFSDK {
     const config = this.config;
     const body = {
       client_id: config?.client_id,
-      grant_type: 'authorization_code',
+      grant_type: "authorization_code",
       redirect_uri: config?.redirect_url,
       code_verifier,
       code,
     };
-    return fetchData(
-      'POST',
-      `${config?.api_endpoint}${this.ACCESS_TOKEN_PATH}`,
-      JSON.stringify(body)
-    );
+    return fetchData("POST", `${config?.api_endpoint}${this.ACCESS_TOKEN_PATH}`, JSON.stringify(body));
   }
 
   public getRefreshToken(token: string): Promise<any> {
@@ -219,13 +191,9 @@ class OLAFSDK {
     const body = {
       refresh_token: token,
       client_id: config?.client_id,
-      grant_type: 'refresh_token',
+      grant_type: "refresh_token",
     };
-    return fetchData(
-      'POST',
-      `${config?.api_endpoint}${this.ACCESS_TOKEN_PATH}`,
-      JSON.stringify(body)
-    );
+    return fetchData("POST", `${config?.api_endpoint}${this.ACCESS_TOKEN_PATH}`, JSON.stringify(body));
   }
 
   public setLanguage(language: string): void {
@@ -265,9 +233,7 @@ class OLAFSDK {
 
   private getConfigFromLocalStorage(): ConfigModel | undefined {
     try {
-      const config = JSON.parse(
-        localStorage.getItem(this.CONFIG_STORAGE_KEY) ?? ''
-      );
+      const config = JSON.parse(localStorage.getItem(this.CONFIG_STORAGE_KEY) ?? "");
       const now = new Date();
       if (config.expiry >= now.getTime()) {
         return config;
@@ -289,9 +255,7 @@ class OLAFSDK {
 
   private getAuthFromLocalStorage(): AuthModel | undefined {
     try {
-      return JSON.parse(
-        localStorage.getItem(this.ACCESS_TOKEN_STORAGE_KEY) ?? ''
-      );
+      return JSON.parse(localStorage.getItem(this.ACCESS_TOKEN_STORAGE_KEY) ?? "");
     } catch (error) {
       return undefined;
     }
