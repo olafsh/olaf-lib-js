@@ -10,21 +10,15 @@ export const getCryptoSubtle = () => {
 };
 
 export const createRandomString = () => {
-  const charset =
-    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_~.';
-  let random = '';
-  const randomValues = Array.from(
-    getCrypto().getRandomValues(new Uint8Array(43))
-  );
+  const charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_~.";
+  let random = "";
+  const randomValues = Array.from(getCrypto().getRandomValues(new Uint8Array(43)));
   randomValues.forEach(v => (random += charset[v % charset.length]));
   return random;
 };
 
 export const sha256 = async (s: string) => {
-  const digestOp: any = getCryptoSubtle().digest(
-    { name: 'SHA-256' },
-    new TextEncoder().encode(s)
-  );
+  const digestOp: any = getCryptoSubtle().digest({ name: "SHA-256" }, new TextEncoder().encode(s));
   // msCrypto (IE11) uses the old spec, which is not Promise based
   // https://msdn.microsoft.com/en-us/expression/dn904640(v=vs.71)
   // Instead of returning a promise, it returns a CryptoOperation with a result property in it.
@@ -40,7 +34,7 @@ export const sha256 = async (s: string) => {
         rej(e.error);
       };
       digestOp.onabort = () => {
-        rej('The digest operation was aborted');
+        rej("The digest operation was aborted");
       };
     });
   }
