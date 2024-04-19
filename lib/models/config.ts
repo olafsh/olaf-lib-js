@@ -4,9 +4,9 @@ export class ApplicationStyles {
   value: string;
 
   constructor() {
-    this.s_type = '';
-    this.name = '';
-    this.value = '';
+    this.s_type = "";
+    this.name = "";
+    this.value = "";
   }
 }
 
@@ -20,11 +20,11 @@ export class ConfigModel {
   expiry: number;
 
   constructor() {
-    this.account_name = '';
-    this.api_endpoint = '';
-    this.client_id = '';
-    this.account_url = '';
-    this.redirect_url = '';
+    this.account_name = "";
+    this.api_endpoint = "";
+    this.client_id = "";
+    this.account_url = "";
+    this.redirect_url = "";
     this.styles = [];
     this.expiry = 0;
   }
