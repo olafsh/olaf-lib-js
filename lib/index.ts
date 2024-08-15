@@ -176,6 +176,9 @@ class OLAFSDK {
 
   public getAccessToken(code_verifier: string, code: string | undefined) {
     const config = this.config;
+    const headers = new Headers({
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    });
     const body = {
       client_id: config?.client_id,
       grant_type: "authorization_code",
@@ -183,7 +186,14 @@ class OLAFSDK {
       code_verifier,
       code,
     };
-    return fetchData("POST", `${config?.api_endpoint}${this.ACCESS_TOKEN_PATH}`, JSON.stringify(body));
+    let formBodyTemp: string[] = [];
+    for (let property in body) {
+      const encodedKey = encodeURIComponent(property);
+      const encodedValue = encodeURIComponent(body[property]);
+      formBodyTemp.push(encodedKey + "=" + encodedValue);
+    }
+    const formBody = formBodyTemp.join("&");
+    return fetchData("POST", `${config?.api_endpoint}${this.ACCESS_TOKEN_PATH}`, formBody, headers);
   }
 
   public getRefreshToken(token: string): Promise<any> {
