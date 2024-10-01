@@ -68,6 +68,9 @@ await sdk.handleRedirectCallback()
 // Check current authentication status
 console.log(await sdk.isAuthenticated);
 
+// Get access token
+const accessToken = sdk.accessToken;
+
 // Perform a logout
 await sdk.logout();
 ```
