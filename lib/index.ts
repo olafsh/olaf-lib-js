@@ -60,6 +60,14 @@ class OLAFSDK {
     return this._DEFAULT_LANGUAGE;
   }
 
+  get accessToken(): string {
+    const auth = this.getAuthFromLocalStorage();
+    if (auth !== undefined) {
+      return auth.access_token;
+    }
+    return "";
+  }
+
   public fetchConfig(): Promise<any> {
     const headers = { "X-APP-HOST": getHost() ?? "" };
     return fetchData("GET", `${this.OLAF_PUBLIC_ENDPOINT}${this.CONFIG_PATH}`, null, headers)
@@ -108,12 +116,7 @@ class OLAFSDK {
 
   public logout(): Promise<void> | undefined {
     const config = this.config;
-    const auth = this.getAuthFromLocalStorage();
-    if (!auth || !auth.access_token) {
-      return Promise.reject("No access token");
-    }
-
-    const headers = { Authorization: `Bearer ${auth.access_token}` };
+    const headers = { Authorization: `Bearer ${this.accessToken}` };
     return fetchData("POST", `${config?.api_endpoint}${this.LOGOUT_PATH}`, null, headers, true).then(() => {
       localStorage.removeItem(this.ACCESS_TOKEN_STORAGE_KEY);
       window.location.href = window.location.origin;
@@ -123,11 +126,7 @@ class OLAFSDK {
   }
 
   public async verifyToken(): Promise<boolean> {
-    const auth = this.getAuthFromLocalStorage();
-    if (!auth || !auth.access_token) {
-      return Promise.resolve(false);
-    }
-    const headers = { Authorization: `Bearer ${auth.access_token}` };
+    const headers = { Authorization: `Bearer ${this.accessToken}` };
     return await fetchData("POST", `${this.config?.api_endpoint}${this.VERIFY_TOKEN_PATH}`, null, headers)
       .then(() => {
         this.setIsAuthenticated(true);
@@ -174,7 +173,21 @@ class OLAFSDK {
       });
   }
 
-  public getAccessToken(code_verifier: string, code: string | undefined) {
+  // public getRefreshToken(token: string): Promise<any> {
+  //   const config = this.config;
+  //   const body = {
+  //     refresh_token: token,
+  //     client_id: config?.client_id,
+  //     grant_type: "refresh_token",
+  //   };
+  //   return fetchData("POST", `${config?.api_endpoint}${this.ACCESS_TOKEN_PATH}`, JSON.stringify(body));
+  // }
+
+  public setLanguage(language: string): void {
+    this._language = language;
+  }
+
+  private getAccessToken(code_verifier: string, code: string | undefined) {
     const config = this.config;
     const headers = new Headers({
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
@@ -194,20 +207,6 @@ class OLAFSDK {
     }
     const formBody = formBodyTemp.join("&");
     return fetchData("POST", `${config?.api_endpoint}${this.ACCESS_TOKEN_PATH}`, formBody, headers);
-  }
-
-  public getRefreshToken(token: string): Promise<any> {
-    const config = this.config;
-    const body = {
-      refresh_token: token,
-      client_id: config?.client_id,
-      grant_type: "refresh_token",
-    };
-    return fetchData("POST", `${config?.api_endpoint}${this.ACCESS_TOKEN_PATH}`, JSON.stringify(body));
-  }
-
-  public setLanguage(language: string): void {
-    this._language = language;
   }
 
   private setIsAuthenticated(isAuthenticated: boolean): void {
