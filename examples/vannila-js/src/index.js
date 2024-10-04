@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const isAuthenticated = await sdk.isAuthenticated;
 
   if (!isAuthenticated) {
-    greetingHeader.innerHTML = `Welcome!`;
+    greetingHeader.innerHTML = `Welcome, Anonymous!`;
 
     loginButton.addEventListener("click", async () => {
       await sdk.loginWithRedirect();
@@ -23,7 +23,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     loginForm.style.display = "none";
     contentDiv.style.display = "block";
 
-    greetingHeader.innerHTML = `Welcome, ${sdk.config["account_name"]}!`;
+    await sdk.me();
+
+    greetingHeader.innerHTML = `Welcome, ${sdk.user["full_name"]}!`;
 
     logoutButton.addEventListener("click", async () => {
       await sdk.logout();

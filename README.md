@@ -71,6 +71,9 @@ console.log(await sdk.isAuthenticated);
 // Get access token
 const accessToken = sdk.accessToken;
 
+// OPTIONAL: Get user details
+const user = await sdk.me();
+
 // Perform a logout
 await sdk.logout();
 ```
