@@ -1,4 +1,14 @@
-export class UserPermissionsModel {}
+export class UserPermissionsModel {
+  app_label: string;
+  name: string;
+  description: string;
+
+  constructor() {
+    this.app_label = "";
+    this.name = "";
+    this.description = "";
+  }
+}
 
 export class UserModel {
   id: string;
