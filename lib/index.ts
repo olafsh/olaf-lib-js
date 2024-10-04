@@ -1,4 +1,5 @@
 import type { ConfigModel } from "./models/config";
+import type { UserModel } from "./models/user";
 import {
   bufferToBase64UrlEncoded,
   createQueryParams,
@@ -17,6 +18,7 @@ class OLAFSDK {
   private VERIFY_TOKEN_PATH = "/o/verify-token/";
   private AUTHORIZE_PATH = "/o/authorize/";
   private LOGOUT_PATH = "/o/logout/";
+  private USER_DETAILS_PATH = "/users/me/";
   private AUTHORIZE_STORAGE_KEY = "olaf.auth.o";
   private ACCESS_TOKEN_STORAGE_KEY = "olaf.auth.token";
   private CONFIG_STORAGE_KEY = "olaf.config";
@@ -66,6 +68,12 @@ class OLAFSDK {
       return auth.access_token;
     }
     return "";
+  }
+
+  private _user: UserModel | undefined;
+
+  get user(): UserModel | undefined {
+    return this._user;
   }
 
   public fetchConfig(): Promise<any> {
@@ -187,6 +195,18 @@ class OLAFSDK {
     this._language = language;
   }
 
+  public async me(): Promise<any> {
+    const headers = { Authorization: `Bearer ${this.accessToken}` };
+    return await fetchData("GET", `${this.config?.api_endpoint}${this.USER_DETAILS_PATH}`, null, headers)
+      .then((user: any) => {
+        this.setUser(user as UserModel);
+        return Promise.resolve(user);
+      })
+      .catch(error => {
+        return Promise.reject(error);
+      });
+  }
+
   private getAccessToken(code_verifier: string, code: string | undefined) {
     const config = this.config;
     const headers = new Headers({
@@ -268,6 +288,11 @@ class OLAFSDK {
     } catch (error) {
       return undefined;
     }
+  }
+
+  private setUser(user: UserModel) {
+    // set user
+    this._user = user;
   }
 }
 
