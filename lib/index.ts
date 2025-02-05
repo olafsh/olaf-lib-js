@@ -62,6 +62,16 @@ class OLAFSDK {
     return this._DEFAULT_LANGUAGE;
   }
 
+  private _appHost?: string;
+
+  get appHost(): string | null {
+    if (this._appHost !== undefined) {
+      return this._appHost;
+    }
+
+    return getHost();
+  }
+
   get accessToken(): string {
     const auth = this.getAuthFromLocalStorage();
     if (auth !== undefined) {
@@ -77,7 +87,7 @@ class OLAFSDK {
   }
 
   public fetchConfig(): Promise<any> {
-    const headers = { "X-APP-HOST": getHost() ?? "" };
+    const headers = { "X-APP-HOST": this.appHost ?? "" };
     return fetchData("GET", `${this.OLAF_PUBLIC_ENDPOINT}${this.CONFIG_PATH}`, null, headers)
       .then((config: any) => {
         this.setConfigWithExpiry(config as ConfigModel);
@@ -193,6 +203,10 @@ class OLAFSDK {
 
   public setLanguage(language: string): void {
     this._language = language;
+  }
+
+  public setAppHost(host: string): void {
+    this._appHost = host;
   }
 
   public async me(): Promise<any> {

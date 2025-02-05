@@ -49,11 +49,14 @@ Check [examples/](https://github.com/olafsh/olaf-sdk-js/tree/main/examples) dire
 ## Usage
 
 ```js
-// Fetch configuration for your app from olaf.sh platform
-await sdk.fetchConfig()
+// OPTIONAL: If you are using localhost then set app's host
+sdk.setAppHost('sample.apps.olaf.sh');
 
-// Set language for sign in on olaf.sh platform
+// OPTIONAL: Set language for sign in on olaf.sh platform
 sdk.setLanguage('en');
+  
+// Fetch configuration for your app from olaf.sh platform
+await sdk.fetchConfig();
 
 // Perform a login with redirect
 await sdk.loginWithRedirect();
@@ -63,10 +66,10 @@ const authorizeUrl = await sdk.buildAuthorizeUrl();
 
 // Handle login callback from olaf.sh platform
 // HINT: It's usually the best to done this on a different route
-await sdk.handleRedirectCallback()
+await sdk.handleRedirectCallback();
 
 // Check current authentication status
-console.log(await sdk.isAuthenticated);
+const isAuthenticated = await sdk.isAuthenticated;
 
 // Get access token
 const accessToken = sdk.accessToken;
